@@ -1,4 +1,4 @@
-package redis
+package pubsub
 
 type ListPlayerReq interface {
 	GetPlayerID() string

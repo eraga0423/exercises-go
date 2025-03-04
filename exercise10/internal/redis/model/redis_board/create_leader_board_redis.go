@@ -3,13 +3,15 @@ package redis_board
 import (
 	"context"
 	"fmt"
-	myredis "github.com/my/repo/internal/types/redis"
+
+	"github.com/my/repo/internal/types/pubsub"
+
 	"github.com/redis/go-redis/v9"
 
 	"log/slog"
 )
 
-func (m *LeaderBoardRedis) CreatePlayer(req myredis.CreatePlayerReq) (myredis.CreatePlayerResp, error) {
+func (m *LeaderBoardRedis) CreatePlayer(req pubsub.CreatePlayerReq) (pubsub.CreatePlayerResp, error) {
 	if req == nil {
 		slog.Error("req is nil")
 	}

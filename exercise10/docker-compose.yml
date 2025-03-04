@@ -8,12 +8,4 @@ services:
     ports:
       - "6379:6379"
 
-  app:
-    build: .
-    container_name: go_app
-    depends_on:
-      - redis
-    environment:
-      - REDIS_ADDR=redis:6379
-    ports:
-      - "8080:8080"
+

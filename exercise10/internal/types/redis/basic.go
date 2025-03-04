@@ -1,4 +1,4 @@
-package redis
+package pubsub
 
 type LeaderBoard interface {
 	CreatePlayer(CreatePlayerReq) (CreatePlayerResp, error)

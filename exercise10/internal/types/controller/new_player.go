@@ -5,4 +5,5 @@ type NewPlayerReq interface {
 	GetId() string
 	GetScore() int
 }
-type NewPlayerResp interface{}
+type NewPlayerResp interface {
+}
