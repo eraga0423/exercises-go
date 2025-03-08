@@ -16,9 +16,3 @@ func NewLeaderBoardRedis(conf *config.Config, rdb *redis.Client) *LeaderBoardRed
 		rdb:  rdb,
 	}
 }
-
-type LeaderBoard struct {
-	UserID string
-	Name   string
-	Score  int
-}

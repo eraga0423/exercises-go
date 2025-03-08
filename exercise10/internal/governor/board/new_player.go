@@ -4,9 +4,12 @@ import "github.com/my/repo/internal/types/controller"
 
 func (l *LeaderBoard) NewPlayer(req controller.NewPlayerReq) (controller.NewPlayerResp, error) {
 	newPlayer := CreateNewPlayer(req.GetName(), req.GetId(), req.GetScore())
-	l.MyRedis.CreatePlayer(newPlayer)
+	resp, err := l.MyRedis.CreatePlayer(newPlayer)
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	return resp, nil
 }
 
 type newPlayerReq struct {
@@ -24,13 +27,25 @@ func CreateNewPlayer(name string, id string, score int) *newPlayerReq {
 	}
 }
 
-func (r newPlayerReq) GetName() string {
-	return r.name
+// func (r newPlayerReq) GetName() string {
+// 	return r.name
+// }
+
+// func (r newPlayerReq) GetId() string {
+// 	return r.id
+// }
+// func (r newPlayerReq) GetScore() int {
+// 	return r.score
+// }
+
+func (m *newPlayerReq) GetPlayerID() string {
+	return m.id
 }
 
-func (r newPlayerReq) GetIdd() string {
-	return r.id
+func (m *newPlayerReq) GetPlayerName() string {
+	return m.name
 }
-func (r newPlayerReq) GetScore() int {
-	return r.score
+
+func (m *newPlayerReq) GetPlayerScore() int {
+	return m.score
 }

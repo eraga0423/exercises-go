@@ -2,7 +2,7 @@ package board
 
 import (
 	"github.com/my/repo/internal/config"
-	pubsub "github.com/my/repo/internal/types/redis"
+	"github.com/my/repo/internal/types/pubsub"
 	"github.com/redis/go-redis/v9"
 )
 
