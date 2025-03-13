@@ -5,8 +5,14 @@ import (
 )
 
 func (r *LeaderBoard) ListPlayers(req controller.ListPlayerReq) (controller.ListPlayerResp, error) {
-r.MyRedis.ListPlayers(req.)
-	return &ListPlayerResp{}, nil
+
+	response, err := r.MyRedis.ListPlayers(nil)
+	if err != nil {
+		return nil, err
+	}
+	newresp := response.GetList()
+
+	return newresp, nil
 }
 
 type ListPlayerResp struct {
@@ -19,5 +25,3 @@ func newListPlayer() *ListPlayerResp {
 func (i *ListPlayerResp) GetList() []controller.ItemPlayerResp {
 	return i.Players
 }
-
-

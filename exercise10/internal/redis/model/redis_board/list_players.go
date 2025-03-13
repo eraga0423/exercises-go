@@ -5,17 +5,16 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/my/repo/internal/types/controller"
 	"github.com/my/repo/internal/types/pubsub"
 )
 
-func (l *LeaderBoardRedis) ListPlayers(pubsub.CreatePlayerReq) (pubsub.CreatePlayerResp, error) {
+func (l *LeaderBoardRedis) ListPlayers(req pubsub.ListPlayerReq) (pubsub.ListPlayerResp, error) {
 	ctx := context.Background()
 	topPlayers, err := l.rdb.ZRevRangeWithScores(ctx, l.conf.Redis.RedisName, 0, -1).Result()
 	if err != nil {
 		return nil, err
 	}
-	var players []controller.ItemPlayerResp
+	var players []pubsub.ItemPlayerResp
 	for _, player := range topPlayers {
 		member := player.Member.(string)
 		parts := strings.SplitN(member, ":", 2)
@@ -31,8 +30,14 @@ func (l *LeaderBoardRedis) ListPlayers(pubsub.CreatePlayerReq) (pubsub.CreatePla
 			Name:  playerName,
 			Score: int(player.Score),
 		})
+
 	}
-	return players, nil
+
+	return &listPlayerResp{Players: players}, nil
+}
+
+type listPlayerResp struct {
+	Players []pubsub.ItemPlayerResp
 }
 
 type itemPlayersResp struct {
@@ -41,12 +46,16 @@ type itemPlayersResp struct {
 	Score int
 }
 
-func (p *itemPlayersResp) GetID() string {
+func (p *itemPlayersResp) GetPlayerID() string {
 	return p.ID
 }
-func (p *itemPlayersResp) GetName() string {
+func (p *itemPlayersResp) GetPlayerName() string {
 	return p.Name
 }
-func (p *itemPlayersResp) GetScore() int {
+func (p *itemPlayersResp) GetPlayerScore() int {
 	return p.Score
+}
+
+func (p *listPlayerResp) GetList() []pubsub.ItemPlayerResp {
+	return p.Players
 }
