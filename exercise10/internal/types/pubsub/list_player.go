@@ -1,8 +1,6 @@
 package pubsub
 
-type ListPlayerReq interface {
-	GetPlayerID() string
-}
+type ListPlayerReq interface{}
 type ListPlayerResp interface {
 	GetList() []ItemPlayerResp
 }
