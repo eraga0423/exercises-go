@@ -1,6 +1,10 @@
 package config
 
-import "os"
+import (
+	"github.com/joho/godotenv"
+	"log"
+	"os"
+)
 
 type Config struct {
 	//ENV   string
@@ -23,6 +27,10 @@ type RedisConfig struct {
 const NameRedis = "leaderBoard"
 
 func NewConfig() *Config {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	return &Config{
 		API: APIConfig{
 			Rest: APIRestConfig{

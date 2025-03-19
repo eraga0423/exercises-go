@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"github.com/my/repo/internal/config"
 	"github.com/my/repo/internal/rest/handler"
 	"github.com/my/repo/internal/rest/router"
@@ -14,6 +15,7 @@ type Rest struct {
 }
 
 func NewRest(conf *config.Config, ctrl controller.Controller) *Rest {
+
 	h := handler.NewHandler(ctrl)
 	r := router.NewRouter(h)
 	return &Rest{
@@ -22,8 +24,9 @@ func NewRest(conf *config.Config, ctrl controller.Controller) *Rest {
 	}
 }
 
-func (a *Rest) Start() error {
-	mux := http.NewServeMux()
+func (a *Rest) Start(ctx context.Context) error {
+	//mux := http.NewServeMux()
+	mux := a.router.Start(ctx)
 	srv := &http.Server{
 		Handler: mux,
 		Addr:    a.conf.API.Rest.Host + ":" + a.conf.API.Rest.Port,

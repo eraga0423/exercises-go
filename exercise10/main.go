@@ -7,20 +7,28 @@ import (
 	"github.com/my/repo/internal/redis"
 	"github.com/my/repo/internal/rest"
 	"log/slog"
+	"os"
+	"os/signal"
 )
 
-var ctx = context.Background()
-
 func main() {
+	ctx, cancel := context.WithCancel(context.Background())
 	conf := config.NewConfig()
-	newredis.NewRedisClient(conf)
+	newredis.RedisClient(conf)
 	gov := governor.NewGovernor()
 	r := rest.NewRest(conf, gov)
 	go func() {
-		if err := r.Start(); err != nil {
+		if err := r.Start(ctx); err != nil {
 			slog.Error("failed start rest server", err)
 		}
 	}()
+	go func(cancelFunc context.CancelFunc) {
+		shutdown := make(chan os.Signal, 1)
+		signal.Notify(shutdown, os.Interrupt)
+		<-shutdown
+		cancelFunc()
+	}(cancel)
+	<-ctx.Done()
 }
 
 //// Получаем адрес Redis из переменной окружения

@@ -10,7 +10,7 @@ type Redis struct {
 }
 
 func NewRedis(conf *config.Config) *Redis {
-	rdb := NewRedisClient(conf)
+	rdb := RedisClient(conf)
 
 	redis.NewClient(&redis.Options{
 		Addr: conf.Redis.Host,
@@ -20,7 +20,8 @@ func NewRedis(conf *config.Config) *Redis {
 	}
 }
 
-func NewRedisClient(conf *config.Config) *redis.Client {
+func RedisClient(conf *config.Config) *redis.Client {
+
 	return redis.NewClient(&redis.Options{
 		Addr: conf.Redis.Host,
 	})
