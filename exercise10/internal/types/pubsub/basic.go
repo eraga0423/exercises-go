@@ -2,7 +2,7 @@ package pubsub
 
 type LeaderBoard interface {
 	CreatePlayer(CreatePlayerReq) (CreatePlayerResp, error)
-	ListPlayers(ListPlayerReq) (ListPlayerResp, error)
+	ListPlayers() (ListPlayerResp, error)
 }
 
 type MyRedis interface {

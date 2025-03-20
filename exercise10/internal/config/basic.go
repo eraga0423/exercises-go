@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -29,6 +30,7 @@ const NameRedis = "leaderBoard"
 func NewConfig() *Config {
 	err := godotenv.Load()
 	if err != nil {
+		fmt.Println(err.Error())
 		log.Fatal("Error loading .env file")
 	}
 	return &Config{

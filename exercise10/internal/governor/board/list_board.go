@@ -1,12 +1,18 @@
 package board
 
 import (
+	"errors"
+	"fmt"
 	"github.com/my/repo/internal/types/controller"
 )
 
-func (r *LeaderBoard) ListPlayers(req controller.ListPlayerReq) (controller.ListPlayerResp, error) {
-	request := newListPlayerReq()
-	response, err := r.MyRedis.ListPlayers(request)
+func (l *LeaderBoard) ListPlayers() (controller.ListPlayerResp, error) {
+	fmt.Println("method", "ListPlayers:governor")
+	//request := newListPlayerReq()
+	response, err := l.MyRedis.ListPlayers()
+	if response == nil {
+		return nil, errors.New("response is nil")
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -16,7 +22,7 @@ func (r *LeaderBoard) ListPlayers(req controller.ListPlayerReq) (controller.List
 	for _, it := range response.GetList() {
 		ps = append(ps, newPlayer(it.GetPlayerID(), it.GetPlayerName(), it.GetPlayerScore()))
 	}
-
+	fmt.Println("method", "ListPlayers:governor", "end")
 	return newListPlayer(ps), nil
 
 }
@@ -29,9 +35,11 @@ type ListPlayerResp struct {
 func newListPlayerReq() *ListPlayerReq {
 	return &ListPlayerReq{}
 }
+
 func newListPlayer(ps []*Player) *ListPlayerResp {
 	return &ListPlayerResp{ps}
 }
+
 func (i *ListPlayerResp) GetList() []controller.ItemPlayerResp {
 	list := make([]controller.ItemPlayerResp, 0, len(i.Players))
 

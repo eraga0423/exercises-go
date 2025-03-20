@@ -2,13 +2,16 @@ package redis_board
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
 	"strings"
 
 	"github.com/my/repo/internal/types/pubsub"
 )
 
-func (l *LeaderBoardRedis) ListPlayers(req pubsub.ListPlayerReq) (pubsub.ListPlayerResp, error) {
+func (l *LeaderBoardRedis) ListPlayers() (pubsub.ListPlayerResp, error) {
+	fmt.Println("method", "ListPlayers:redis")
 	ctx := context.Background()
 	topPlayers, err := l.rdb.ZRevRangeWithScores(ctx, l.conf.Redis.RedisName, 0, -1).Result()
 	if err != nil {
@@ -32,7 +35,10 @@ func (l *LeaderBoardRedis) ListPlayers(req pubsub.ListPlayerReq) (pubsub.ListPla
 		})
 
 	}
-
+	if players == nil || len(players) == 0 {
+		slog.Error("No players found")
+		return nil, errors.New("no players found")
+	}
 	return &listPlayerResp{Players: players}, nil
 }
 

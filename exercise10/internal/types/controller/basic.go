@@ -1,7 +1,7 @@
 package controller
 
 type LeaderBoard interface {
-	ListPlayers(ListPlayerReq) (ListPlayerResp, error)
+	ListPlayers() (ListPlayerResp, error)
 	NewPlayer(NewPlayerReq) (NewPlayerResp, error)
 }
 

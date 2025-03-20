@@ -14,7 +14,7 @@ import (
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	conf := config.NewConfig()
-	newredis.RedisClient(conf)
+	newredis.NewRedis(conf)
 	gov := governor.NewGovernor()
 	r := rest.NewRest(conf, gov)
 	go func() {
